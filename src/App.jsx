@@ -1,9 +1,13 @@
 import React from 'react'
 import { useState } from 'react';
+import Card from './components/card.jsx';
 
 function App() {
 
+  
+
   const [country, setCountry] = useState('null');
+  const [countrydata, setcountrydata] = useState(null);
 
   const searchcountry = () => {
   const api=fetch(`https://restcountries.com/v3.1/name/${country}`)
@@ -13,8 +17,12 @@ function App() {
       }
       return response.json();
     })
-    .then((response) => {
-      console.log(response[0]);
+    .then((data) => {
+
+       setcountrydata(data[0]);
+       console.log(data[0])
+      
+      
     })
     .catch((error) => {
       console.error('There was a problem with the fetch operation:', error);
@@ -31,7 +39,10 @@ function App() {
     />
     <button onClick={searchcountry}>Search</button>
 
-    </>
+
+    <Card countrydata={countrydata}/>
+
+     </>
   )
 }
 
