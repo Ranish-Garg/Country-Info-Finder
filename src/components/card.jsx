@@ -1,56 +1,43 @@
-import React from 'react'
-import { useState,useEffect } from 'react';
-import { memo } from 'react';
-
+import React, { useState, useEffect, memo } from 'react';
+import './Card.css';
 
 function Card(props) {
+  const [flag, setFlag] = useState(null);
+  const [capital, setCapital] = useState(null);
+  const [population, setPopulation] = useState(null);
+  const [continent, setContinent] = useState(null);
+  const [currency, setCurrency] = useState(null);
 
-    const [flag, setflag] = useState(null);
-    const [capital, setcapital] = useState(null);
-    const [population, setpopulation] = useState(null);
-    const [continent, setcontinent] = useState(null);
-    const [currency, setcurrency] = useState(null);
+  useEffect(() => {
+    if (props.countrydata) {
+      setFlag(props.countrydata.flags.png);
+      setCapital(props.countrydata.capital ? props.countrydata.capital[0] : 'N/A');
+      setPopulation(props.countrydata.population);
+      setContinent(props.countrydata.continents[0]);
+      setCurrency(
+        props.countrydata.currencies
+          ? Object.values(props.countrydata.currencies)[0].name
+          : 'N/A'
+      );
+    }
+  }, [props.countrydata]);
 
+  if (!props.countrydata) {
+    return null;
+  }
 
-
-    useEffect(() => {
-        if (props.countrydata) {
-          setflag(props.countrydata.flags.png); 
-          setcapital(props.countrydata.capital ? props.countrydata.capital[0] : 'N/A'); 
-          setpopulation(props.countrydata.population);
-          setcontinent(props.countrydata.continents[0]);
-        setcurrency(props.countrydata.currencies ? Object.values(props.countrydata.currencies)[0].name : 'N/A');
-
-
-        }
-      }, [props.countrydata]); 
-  
-
-
-    if (!props.countrydata) {
-        return <></>; 
-      }
-
-    return 
-    (
-        <>
-
-<div 
-//   className="flag" 
-//   style={{
-//     height: '20vh',
-//     width: '20vh',
-//     backgroundImage: flag ? `url(${flag})` : 'none',
-//     backgroundSize: 'cover',
-//     backgroundPosition: 'center'
-//   }}
-></div> 
-
-
-        </>
-    )
+  return (
+    <div className="card">
+      <img src={flag} alt="Flag" className="flag" />
+      <h2>{props.countrydata.name.common}</h2>
+      <ul>
+        <li><strong>Capital:</strong> {capital}</li>
+        <li><strong>Population:</strong> {population ? population.toLocaleString() : 'N/A'}</li>
+        <li><strong>Continent:</strong> {continent}</li>
+        <li><strong>Currency:</strong> {currency}</li>
+      </ul>
+    </div>
+  );
 }
 
-
-
-export default memo(Card)
+export default memo(Card);
